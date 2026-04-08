@@ -1,6 +1,9 @@
 # A User Friendly Approach to Measuring Short Duration Time Perception
 Included is a body of MATLAB code designed for running time perception experiments using [Psychtoolbox 3.0.19.16 "Last Free Dessert"]([http://psychtoolbox.org/download](https://github.com/Psychtoolbox-3/Psychtoolbox-3/releases)) on [MATLAB 2024B](https://www.mathworks.com/products/new_products/latest_features.html) accompanying the article, A User-Friendly Approach to Measuring Short Duration Time Perception, published on PsychArXiv on August 24, 2025. This version of Psychtoolbox is open access and free to use on any device, while MATLAB can be accessed via a subscription by most universities and organizations. Sample analysis code is provided in [R 4.4.2 "Pile of Leaves"](https://cran.r-project.org/bin/windows/base/), an open access programming language and platform. No packages or other dependencies are required.
 
+# About This Fork
+This fork extends the original framework with audio stimulus support, enabling experiments to present intervals as tones in addition to (or alternating with) visual stimuli. The goal is to make the framework more flexible for multi-modal time perception research.
+
 # What kinds of experiments can I run using this code?
 This code only supports visual prospective time replication and comparison experiments. The following structure is used for all experiments: Insert diagram. 
 
@@ -132,6 +135,10 @@ num_comp_trials = 10;            % How many trials to run for each standard/comp
 
 # How to run experiments 
 Once you've entered in the parameters for your experiment of choice (and make sure you've set the participant_number, which will be used to save participant data), you're now ready to run the experiment! Simply write the name of your experiment's input file (i.e. input_file_replication, etc.) in the command window, press enter, and the experiment will begin! All instructions for the experiments will be presented to the participants before the task begins. 
+
+# Known Issues
+
+**KBQueueCheck keyboard device ID (may be OS/system-specific):** On some systems, `KBQueueCheck` does not reliably detect the correct keyboard device and must be set manually each run. If you run into this, try replacing the `KBQueueCheck`-based device ID with `-3`, which previously functioned as a reliable universal fallback. This issue may not affect all operating systems or users.
 
 # Questions? 
 If you have questions, comments, or concerns, feel free to reach out to Lily Gebhart at gebhart@stanford.edu. 
