@@ -1,7 +1,7 @@
 % FUNCTION: Function to run the double comparison experiment. 
 function results = run_doublecomp_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, stimulus, twoimage_standard_durations, ...
-    twoimage_comp_durations, num_comp_trials, comp_type, comp_order, ...
+    twoimage_comp_durations, num_comp_trials, comp_type, comp_order, stimulus_modality, pahandle, audio_frequency, debug_mode, ...
     white, grey, black, window, screenXpixels, screenYpixels)
 
     [est_time, num_trials, results, exp_condition_list, train_condition_list, break_times] = setup_task(twoimage_comp_durations, num_comp_trials, num_training_trials, num_breaks);
@@ -112,7 +112,7 @@ function results = run_doublecomp_experiment(directory_link, save_after, partici
     for trial_counter=1:length(train_condition_list)
         condition_num = train_condition_list(trial_counter);
         [stimulus, standard_duration, comp_duration] = find_condition(condition_num, stimulus, twoimage_comp_durations, twoimage_standard_durations);
-        response = run_trial(stimulus, standard_duration, comp_duration, comp_order, comp_type, back_color, black, directory_link, window, screenXpixels, screenYpixels);
+        response = run_trial(stimulus, standard_duration, comp_duration, comp_order, comp_type, back_color, black, directory_link, window, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode);
         if response == "escape"
             return
         end
@@ -157,7 +157,7 @@ function results = run_doublecomp_experiment(directory_link, save_after, partici
         end
         condition_num = exp_condition_list(trial_counter);
         [stimulus, standard_duration, comp_duration] = find_condition(condition_num, stimulus, twoimage_comp_durations, twoimage_standard_durations);
-        result = run_trial(stimulus, standard_duration, comp_duration, comp_order, comp_type, back_color, black, directory_link, window, screenXpixels, screenYpixels);
+        result = run_trial(stimulus, standard_duration, comp_duration, comp_order, comp_type, back_color, black, directory_link, window, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode);
         if result == "escape"
             return
         end
@@ -196,5 +196,5 @@ function results = run_doublecomp_experiment(directory_link, save_after, partici
     end
 
     % End experiment. Exit screen.
-    Screen('Close', window);
+    sca;
 end

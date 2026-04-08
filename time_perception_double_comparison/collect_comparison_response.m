@@ -8,11 +8,11 @@ function response = collect_comparison_response(comp_type)
         keys = [KbName('ESCAPE'), KbName('1!'), KbName('2@')];
     end
     keylist(keys)=1;     
-    KbQueueCreate(-3, keylist);
-    KbQueueStart(-3);    
-    [~, first_press, ~, ~, ~] = KbQueueCheck(-3); 
+    KbQueueCreate(6, keylist);
+    KbQueueStart(6);
+    [~, first_press, ~, ~, ~] = KbQueueCheck(6);
     while first_press == 0
-        [~, first_press, ~, ~, ~] = KbQueueCheck(-3);
+        [~, first_press, ~, ~, ~] = KbQueueCheck(6);
     end   
     % Leaves experiment if participant clicks escape key. 
     if KbName(first_press) == "ESCAPE"  

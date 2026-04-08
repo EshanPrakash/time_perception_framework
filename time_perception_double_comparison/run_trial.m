@@ -1,5 +1,5 @@
-% FUNCTION: Function to run each trial. 
-function [response] = run_trial(stimulus, standard_duration, comp_duration, comp_order, comp_type, back_color, black, directory_link, window, screenXpixels, screenYpixels)
+% FUNCTION: Function to run each trial.
+function [response] = run_trial(stimulus, standard_duration, comp_duration, comp_order, comp_type, back_color, black, directory_link, window, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode)
 
 if comp_order == "random"
     order = randperm(2);
@@ -15,38 +15,81 @@ else
     duration2 = comp_duration;
 end
 
-stimulus_link = directory_link + stimulus;
-
-% Fixation cross
+% Fixation cross before first stimulus
 Screen('FillRect', window, back_color);
 Screen('Flip', window);
 Screen('TextSize', window, round(screenXpixels/40));
 Screen('TextFont', window, 'Arial');
-DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);   
+DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
 Screen('Flip', window);
 WaitSecs(1);
 
-% Draw first image to screen
-texture = Screen('MakeTexture', window, resize_image(imread(stimulus_link), screenYpixels));
-Screen('DrawTexture', window, texture, [], [], 0);
-Screen('Flip', window);
-WaitSecs(duration1);
+if stimulus_modality == "visual"
+    stimulus_link = directory_link + stimulus;
+    texture = Screen('MakeTexture', window, resize_image(imread(stimulus_link), screenYpixels));
 
-% Fixation cross
-Screen('FillRect', window, back_color);
-Screen('Flip', window);
-Screen('TextSize', window, round(screenXpixels/40));
-Screen('TextFont', window, 'Arial');
-DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);   
-Screen('Flip', window);
-WaitSecs(1);
+    % First stimulus
+    Screen('DrawTexture', window, texture, [], [], 0);
+    Screen('Flip', window);
+    WaitSecs(duration1);
 
-% Draw second image to screen
-Screen('DrawTexture', window, texture, [], [], 0);
-Screen('Flip', window);
-WaitSecs(duration2);
-Screen('FillRect', window, back_color);
-Screen('Flip', window);
+    % Fixation cross between stimuli
+    Screen('FillRect', window, back_color);
+    Screen('Flip', window);
+    Screen('TextSize', window, round(screenXpixels/40));
+    Screen('TextFont', window, 'Arial');
+    DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
+    Screen('Flip', window);
+    WaitSecs(1);
+
+    % Second stimulus
+    Screen('DrawTexture', window, texture, [], [], 0);
+    Screen('Flip', window);
+    WaitSecs(duration2);
+    Screen('FillRect', window, back_color);
+    Screen('Flip', window);
+else
+    % First audio stimulus
+    audiodata1 = MakeBeep(audio_frequency, duration1, 44100);
+    PsychPortAudio('FillBuffer', pahandle, audiodata1);
+    if debug_mode
+        Screen('TextSize', window, round(screenXpixels/40));
+        Screen('TextFont', window, 'Arial');
+        DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
+    else
+        Screen('FillRect', window, back_color);
+    end
+    Screen('Flip', window);
+    PsychPortAudio('Start', pahandle, 1, 0, 1);
+    WaitSecs(duration1);
+    PsychPortAudio('Stop', pahandle);
+
+    % Fixation cross between stimuli
+    Screen('FillRect', window, back_color);
+    Screen('Flip', window);
+    Screen('TextSize', window, round(screenXpixels/40));
+    Screen('TextFont', window, 'Arial');
+    DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
+    Screen('Flip', window);
+    WaitSecs(1);
+
+    % Second audio stimulus
+    audiodata2 = MakeBeep(audio_frequency, duration2, 44100);
+    PsychPortAudio('FillBuffer', pahandle, audiodata2);
+    if debug_mode
+        Screen('TextSize', window, round(screenXpixels/40));
+        Screen('TextFont', window, 'Arial');
+        DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
+    else
+        Screen('FillRect', window, back_color);
+    end
+    Screen('Flip', window);
+    PsychPortAudio('Start', pahandle, 1, 0, 1);
+    WaitSecs(duration2);
+    PsychPortAudio('Stop', pahandle);
+    Screen('FillRect', window, back_color);
+    Screen('Flip', window);
+end
 
 % Response signal
 Screen('FillRect', window, back_color);

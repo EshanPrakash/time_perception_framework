@@ -1,7 +1,7 @@
 % FUNCTION: Function to run the replication experiment. 
 function results = run_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, replication_type, stimulus_type, durations, ...
-    num_trials, white, grey, black, window, screenXpixels, screenYpixels)
+    num_trials, stimulus_modality, pahandle, audio_frequency, debug_mode, white, grey, black, window, screenXpixels, screenYpixels)
     
     [est_time, num_trials, results, exp_condition_list, train_condition_list, break_times] = setup_task(stimulus_type, durations, num_trials, num_training_trials, num_breaks);
 
@@ -27,7 +27,16 @@ function results = run_experiment(directory_link, save_after, participant_number
     for trial_counter=1:length(train_condition_list)
         condition_num = train_condition_list(trial_counter);
         [stimulus, duration] = find_condition(stimulus_type, durations, condition_num);
-        [~, ~, response] = run_trial(stimulus, duration, replication_type, back_color, black, directory_link, window, screenYpixels, screenXpixels);
+        if stimulus_modality == "alternating"
+            if mod(trial_counter, 2) == 1
+                trial_modality = "visual";
+            else
+                trial_modality = "audio";
+            end
+        else
+            trial_modality = stimulus_modality;
+        end
+        [~, ~, response] = run_trial(stimulus, duration, replication_type, back_color, black, directory_link, window, screenYpixels, screenXpixels, trial_modality, pahandle, audio_frequency, debug_mode);
         if string(response) == "escape"
             return
         end
@@ -71,12 +80,22 @@ function results = run_experiment(directory_link, save_after, participant_number
         end
         condition_num = exp_condition_list(trial_counter);
         [stimulus, duration] = find_condition(stimulus_type, durations, condition_num);
-        [stimulus, duration, response] = run_trial(stimulus, duration, replication_type, back_color, black, directory_link, window, screenYpixels, screenXpixels);
+        if stimulus_modality == "alternating"
+            if mod(trial_counter, 2) == 1
+                trial_modality = "visual";
+            else
+                trial_modality = "audio";
+            end
+        else
+            trial_modality = stimulus_modality;
+        end
+        [stimulus, duration, response] = run_trial(stimulus, duration, replication_type, back_color, black, directory_link, window, screenYpixels, screenXpixels, trial_modality, pahandle, audio_frequency, debug_mode);
         if string(response) == "escape"
             return
         end
         results.Image1(trial_counter) = stimulus;
         results.Time_Condition(trial_counter) = duration;
+        results.Modality(trial_counter) = trial_modality;
         results.Response(trial_counter) = response;
         if any(break_times == trial_counter)
             success = display_screen_text(break_statement, ...
@@ -110,5 +129,5 @@ function results = run_experiment(directory_link, save_after, participant_number
 
     % Press the spacebar to continue and exit the experiment screen. 
     % End experiment. Exit screen.
-    Screen('Close', window);
+    sca;
 end

@@ -14,11 +14,14 @@ num_breaks = 1;                                           % Number of breaks par
 num_training_trials = 5;                                  % Number of training trials to include before data collection. 
    
 % Parameters Specific to the Time Comparison Task
-comp_type = "shorter/longer";                             % How should images be compared? 
-                                                            % Choices: "shorter/longer", "equal/not equal", "shorter/equal/longer". 
-comp_order = "random";                                    % Comparison Stimulus Presentation Times. 
+comp_type = "shorter/longer";                             % How should images be compared?
+                                                            % Choices: "shorter/longer", "equal/not equal", "shorter/equal/longer".
+comp_order = "random";                                    % Comparison Stimulus Presentation Times.
                                                             % Choices: "fixed", "random"
-stimulus = "default.jpg";                                 % Preferred stimulus jpg file name or "default.jpg". The image to be used to represent standard and comparison durations. 
+stimulus_modality = "visual";                             % Choices: "visual", "audio"
+audio_frequency = 440;                                    % Hz — only used if stimulus_modality == "audio"
+debug_mode = false;                                       % If true and audio, shows fixation cross during tone
+stimulus = "default.jpg";                                 % Preferred stimulus jpg file name or "default.jpg". The image to be used to represent standard and comparison durations.
 twoimage_standard_durations = [1, 2];                     % Durations for standard images. Each duration will be used for each standard image.
 twoimage_comp_durations = [0.5, 1, 1.5; 1.5, 2, 2.5];     % What comparison durations should be used relative to each standard duration? List in order of standard durations indicated above.
 num_comp_trials = 10;                                     % How many trials to run for each standard/comparison duration
@@ -35,10 +38,22 @@ black = BlackIndex(screenNumber);
 [screenXpixels, screenYpixels] = Screen('WindowSize', window);
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
  
+% Audio setup
+if stimulus_modality == "audio"
+    InitializePsychSound(1);
+    pahandle = PsychPortAudio('Open', [], 1, 1, 44100, 1);
+else
+    pahandle = [];
+end
+
 % Running experiment
 data_table = run_doublecomp_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, stimulus, twoimage_standard_durations, ...
-    twoimage_comp_durations, num_comp_trials, comp_type, comp_order, ...
-    white, grey, black, window, screenXpixels, screenYpixels); 
+    twoimage_comp_durations, num_comp_trials, comp_type, comp_order, stimulus_modality, pahandle, audio_frequency, debug_mode, ...
+    white, grey, black, window, screenXpixels, screenYpixels);
 
-Screen('Close', window); % Closing screen
+if stimulus_modality == "audio"
+    PsychPortAudio('Close', pahandle);
+end
+
+sca; % Closing screen

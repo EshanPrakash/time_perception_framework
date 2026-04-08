@@ -1,7 +1,7 @@
 % FUNCTION: Function to run the single comparison experiment. 
 function results = run_singlecomp_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, stimulus, standard_duration, ...
-    comp_durations, num_comp_trials, comp_type, ...
+    comp_durations, num_comp_trials, comp_type, stimulus_modality, pahandle, audio_frequency, debug_mode, ...
     white, grey, black, window, screenXpixels, screenYpixels)
     
     [est_time, num_trials, results, exp_condition_list, train_condition_list, break_times] = setup_task(comp_durations, num_comp_trials, num_training_trials, num_breaks);
@@ -77,13 +77,13 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
     end
 
     % Presenting standard image for single image comparison experiment. 
-    present_std_image(directory_link, stimulus, standard_duration, window, back_color, black, screenXpixels, screenYpixels);
+    present_std_image(directory_link, stimulus, standard_duration, window, back_color, black, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency);
     WaitSecs(0.5);
 
     % Run training trials
     for trial_counter=1:length(train_condition_list)
         condition_num = train_condition_list(trial_counter);
-        result = run_trial(directory_link, stimulus, comp_durations(condition_num), comp_type, window, back_color, black, screenXpixels, screenYpixels);
+        result = run_trial(directory_link, stimulus, comp_durations(condition_num), comp_type, window, back_color, black, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode);
         if result == "escape"
             return
         end
@@ -116,7 +116,7 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
     end
 
     % Presenting standard image for single image comparison experiment. 
-    present_std_image(directory_link, stimulus, standard_duration, window, back_color, black, screenXpixels, screenYpixels);
+    present_std_image(directory_link, stimulus, standard_duration, window, back_color, black, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency);
     WaitSecs(0.5);
 
     % Run experiment. Breaks Included When Necessary
@@ -131,7 +131,7 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
         end
         % Running trial
         condition_num = exp_condition_list(trial_counter);
-        result = run_trial(directory_link, stimulus, comp_durations(condition_num), comp_type, window, back_color, black, screenXpixels, screenYpixels);
+        result = run_trial(directory_link, stimulus, comp_durations(condition_num), comp_type, window, back_color, black, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode);
         if result == "escape"
             return
         end
@@ -170,5 +170,5 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
 
     % Press the spacebar to continue and exit the experiment screen. 
     % End experiment. Exit screen.
-    Screen('Close', window);
+    sca;
 end

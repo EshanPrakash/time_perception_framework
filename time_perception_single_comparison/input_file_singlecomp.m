@@ -14,12 +14,15 @@ num_breaks = 1;                     % Number of breaks participants will have th
 num_training_trials = 5;            % Number of training trials to include before data collection. 
 
 % Parameters Specific to the Time Comparison Task
-comp_type = "shorter/longer";       % How should images be compared? 
-                                        % Choices: "shorter/longer", "equal/not equal", "shorter/equal/longer". 
+comp_type = "shorter/longer";       % How should images be compared?
+                                        % Choices: "shorter/longer", "equal/not equal", "shorter/equal/longer".
+stimulus_modality = "visual";       % Choices: "visual", "audio"
+audio_frequency = 440;              % Hz — only used if stimulus_modality == "audio"
+debug_mode = false;                 % If true and audio, shows fixation cross during tone
 stimulus = "default.jpg";           % Choices: "default", or insert your own jpg image.
-standard_duration = 1;              % Duration of standard image.  
-comp_durations = [0.5, 1, 1.5];     % Durations for comparison images. 
-num_comp_trials = 10;               % How many trials per duration being compared. 
+standard_duration = 1;              % Duration of standard image.
+comp_durations = [0.5, 1, 1.5];     % Durations for comparison images.
+num_comp_trials = 10;               % How many trials per duration being compared.
 
 
 % Experiment Setup - do not change
@@ -33,10 +36,22 @@ black = BlackIndex(screenNumber);
 [screenXpixels, screenYpixels] = Screen('WindowSize', window);
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
     
+% Audio setup
+if stimulus_modality == "audio"
+    InitializePsychSound(1);
+    pahandle = PsychPortAudio('Open', [], 1, 1, 44100, 1);
+else
+    pahandle = [];
+end
+
 % Run experiment
 data_table = run_singlecomp_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, stimulus, standard_duration, ...
-    comp_durations, num_comp_trials, comp_type, ...
-    white, grey, black, window, screenXpixels, screenYpixels); 
+    comp_durations, num_comp_trials, comp_type, stimulus_modality, pahandle, audio_frequency, debug_mode, ...
+    white, grey, black, window, screenXpixels, screenYpixels);
 
-Screen('Close', window); % Closing screen
+if stimulus_modality == "audio"
+    PsychPortAudio('Close', pahandle);
+end
+
+sca; % Closing screen

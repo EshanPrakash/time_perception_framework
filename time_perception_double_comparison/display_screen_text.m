@@ -13,11 +13,11 @@ function success = display_screen_text(text, window, grey, black, screen_size_x)
 
     keylist = zeros(1, 256);
     keylist([KbName('ESCAPE'), KbName('space')]) = 1;
-    KbQueueCreate(-3, keylist);
-    KbQueueStart(-3); 
-    [~, first_press, ~, ~, ~] = KbQueueCheck(-3);
+    KbQueueCreate(6, keylist);
+    KbQueueStart(6); 
+    [~, first_press, ~, ~, ~] = KbQueueCheck(6);
     while first_press == 0 
-        [~, first_press, ~, ~, ~] = KbQueueCheck(-3); 
+        [~, first_press, ~, ~, ~] = KbQueueCheck(6); 
     end
 
     if KbName(first_press) == "ESCAPE"
@@ -29,13 +29,13 @@ function success = display_screen_text(text, window, grey, black, screen_size_x)
         Screen('Flip', window);
         keylist = zeros(1, 256);
         keylist([KbName('ESCAPE'), KbName('space')]) = 1;
-        KbQueueCreate(-3, keylist);
-        KbQueueStart(-3); 
-        [~, first_press, ~, ~, ~] = KbQueueCheck(-3);
+        KbQueueCreate(6, keylist);
+        KbQueueStart(6); 
+        [~, first_press, ~, ~, ~] = KbQueueCheck(6);
         while first_press == 0 
-            [~, first_press, ~, ~, ~] = KbQueueCheck(-3); 
+            [~, first_press, ~, ~, ~] = KbQueueCheck(6); 
         end
-        Screen('Close', window);
+        sca;
         return  
     end
     Screen('FillRect', window, grey);
