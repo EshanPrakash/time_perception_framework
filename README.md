@@ -5,7 +5,7 @@ Included is a body of MATLAB code designed for running time perception experimen
 This fork extends the original framework with audio stimulus support, enabling experiments to present intervals as tones in addition to (or alternating with) visual stimuli. The goal is to make the framework more flexible for multi-modal time perception research.
 
 # What kinds of experiments can I run using this code?
-This code only supports visual prospective time replication and comparison experiments. The following structure is used for all experiments: Insert diagram. 
+This code supports visual and auditory prospective time replication and comparison experiments. The following structure is used for all experiments: Insert diagram. 
 
 - Introduction
 - Task explanations and introductions
@@ -24,16 +24,16 @@ The following features are integrated in all experiments designed with this fram
 - Experimental trial data is saved to a datatable specific to each experiment type. Sample analysis scripts are provided.
 
 ## Reproduction Experiments
-Time replication experiments assess how well a user can replicate a given time interval, inidirectly assessing patients' working memory capacity as they temporarily store the interval duration before replicating it. The presented time intervals can be auditory or visual. Only visual intervals are supported here. 
+Time replication experiments assess how well a user can replicate a given time interval, indirectly assessing patients' working memory capacity as they temporarily store the interval duration before replicating it. The presented time intervals can be auditory or visual, and alternating (ABABAB) sequences are also supported. 
 
 The following customizations can be made to the base experiment:
-- **Replication Type**: There are several common ways for a participant to replicate the subjective duration of a visual stimulus. They include pressing a key to start and pressing a key to end the replicated interval, holding on a key for the subjective duration of the interval, and receiving a signal that the replicated interval has begun and pressing a key to stop the interval.
+- **Replication Type**: There are several common ways for a participant to replicate the subjective duration of a visual or auditory stimulus. They include pressing a key to start and pressing a key to end the replicated interval, holding on a key for the subjective duration of the interval, and receiving a signal that the replicated interval has begun and pressing a key to stop the interval.
 - **Durations**: The number and length of intervals 
 - **Stimuli**: The default stimulus is a large circle. Any number of user defined images can be used as alternatives to the default stimulus.
 - **Number of Trials**: The number of trials for each duration/stimulus combination can also be changed. Note that every duration specified will be matched with every stimulus specified, and the same number of trials will be applied to each duration/stimulus combination. 
 
 ## Comparison Experiments 
-Time comparison experiments assesses how well a participant can determine the temporal relationship between two presented images. There are two main types of comparison experiments: single and double comparison experiments. 
+Time comparison experiments assesses how well a participant can determine the temporal relationship between two presented stimuli. There are two main types of comparison experiments: single and double comparison experiments. 
 
 ### Single Comparison Experiments
 In single image experiments, participants are presented with one or more "standard" durations that they will make comparisons with throughout the rest of the experiment. In each trial, only a single image is presented and participants are asked to indicate how the duration of the presented stimulus relates to the standard duration(s). For example, when presented with a stimulus on a given trial, participants may be asked to press the "1" key if the stimulus duration felt longer than the standard duration and "2" if the stimulus duration felt shorter than the standard duration. 
@@ -53,7 +53,7 @@ Double comparison experiments can be customized in the following ways under this
 - **Trial Order:** The order of the standard and comparison durations on each trial can be kept fixed or randomized.
 - **Standard Stimuli:** The stimuli that will always be presented with the standard duration.
 - **Comparison Stimuli:** The stimuli that will be compared with each standard stimulus. Different comparison stimuli may be directly compared with each standard stimulus. 
-- **Standard Durations:** The duration of each standard image, user provided or otherwise.
+- **Standard Durations:** The duration of each standard stimulus, user provided or otherwise.
 - **Comparison Durations:** Any number and length of stimulus durations to be compared with the standard durations can be specified.
 - **Number of Trials:** The number of trials for each duration can also be changed. The same number of trials will be run for each duration. 
 
