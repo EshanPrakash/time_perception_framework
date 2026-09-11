@@ -6,7 +6,7 @@
  clear;   
 
 % General Parameters - to be changed for each operating system and experiment.
-directory_link = string(fileparts(mfilename('fullpath'))) + "/";                                      % directory for experiment folders (auto-detected, no per-machine edit needed)
+directory_link = "";                                      % directory for experiment folders
 save_after = 5;                                           % Save data after __ trials.
 participant_number = 0;                                   % participant number
 background_color = "white";                               % Choices: "white", "grey"
