@@ -11,13 +11,18 @@ function success = display_screen_text(text, window, grey, black, screen_size_x)
     DrawFormattedText(window, text, 'center', 'center', 0, round(screen_size_x*(1/25)), black);
     Screen('Flip', window);
 
+    if ispc
+        kb_device = -3;
+    else
+        kb_device = [];
+    end
     keylist = zeros(1, 256);
     keylist([KbName('ESCAPE'), KbName('space')]) = 1;
-    KbQueueCreate(6, keylist);
-    KbQueueStart(6); 
-    [~, first_press, ~, ~, ~] = KbQueueCheck(6);
-    while first_press == 0 
-        [~, first_press, ~, ~, ~] = KbQueueCheck(6); 
+    KbQueueCreate(kb_device, keylist);
+    KbQueueStart(kb_device);
+    [~, first_press, ~, ~, ~] = KbQueueCheck(kb_device);
+    while first_press == 0
+        [~, first_press, ~, ~, ~] = KbQueueCheck(kb_device);
     end
 
     if KbName(first_press) == "ESCAPE"
@@ -29,11 +34,11 @@ function success = display_screen_text(text, window, grey, black, screen_size_x)
         Screen('Flip', window);
         keylist = zeros(1, 256);
         keylist([KbName('ESCAPE'), KbName('space')]) = 1;
-        KbQueueCreate(6, keylist);
-        KbQueueStart(6); 
-        [~, first_press, ~, ~, ~] = KbQueueCheck(6);
-        while first_press == 0 
-            [~, first_press, ~, ~, ~] = KbQueueCheck(6); 
+        KbQueueCreate(kb_device, keylist);
+        KbQueueStart(kb_device);
+        [~, first_press, ~, ~, ~] = KbQueueCheck(kb_device);
+        while first_press == 0
+            [~, first_press, ~, ~, ~] = KbQueueCheck(kb_device);
         end
         sca;
         return  

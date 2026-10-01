@@ -7,13 +7,18 @@ function response = collect_comparison_response(comp_type)
     else
         keys = [KbName('ESCAPE'), KbName('1!'), KbName('2@')];
     end
-    keylist(keys)=1;     
-    KbQueueCreate(6, keylist);
-    KbQueueStart(6);
-    [~, first_press, ~, ~, ~] = KbQueueCheck(6);
+    keylist(keys)=1;
+    if ispc
+        kb_device = -3;
+    else
+        kb_device = [];
+    end
+    KbQueueCreate(kb_device, keylist);
+    KbQueueStart(kb_device);
+    [~, first_press, ~, ~, ~] = KbQueueCheck(kb_device);
     while first_press == 0
-        [~, first_press, ~, ~, ~] = KbQueueCheck(6);
-    end   
+        [~, first_press, ~, ~, ~] = KbQueueCheck(kb_device);
+    end
     % Leaves experiment if participant clicks escape key. 
     if KbName(first_press) == "ESCAPE"  
         response = "escape";                                                                                                   
