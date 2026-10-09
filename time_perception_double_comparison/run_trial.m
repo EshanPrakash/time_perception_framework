@@ -26,71 +26,28 @@ DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)
 Screen('Flip', window);
 WaitSecs(1);
 
-if stimulus_modality == "visual"
+texture = [];
+if stimulus_modality ~= "audio"
     stimulus_link = fullfile(directory_link, stimulus);
     texture = Screen('MakeTexture', window, resize_image(imread(stimulus_link), screenYpixels));
+end
 
-    % First stimulus
-    Screen('DrawTexture', window, texture, [], [], 0);
-    Screen('Flip', window);
-    WaitSecs(duration1);
+% First stimulus
+present_stimulus(window, texture, duration1, stimulus_modality, back_color, black, screenXpixels, pahandle, audio_frequency, debug_mode);
 
-    % Fixation cross between stimuli
-    Screen('FillRect', window, back_color);
-    Screen('Flip', window);
-    Screen('TextSize', window, round(screenXpixels/40));
-    Screen('TextFont', window, 'Arial');
-    DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
-    Screen('Flip', window);
-    WaitSecs(1);
+% Fixation cross between stimuli
+Screen('FillRect', window, back_color);
+Screen('Flip', window);
+Screen('TextSize', window, round(screenXpixels/40));
+Screen('TextFont', window, 'Arial');
+DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
+Screen('Flip', window);
+WaitSecs(1);
 
-    % Second stimulus
-    Screen('DrawTexture', window, texture, [], [], 0);
-    Screen('Flip', window);
-    WaitSecs(duration2);
-    Screen('FillRect', window, back_color);
-    Screen('Flip', window);
-else
-    % First audio stimulus
-    audiodata1 = MakeBeep(audio_frequency, duration1, 44100);
-    PsychPortAudio('FillBuffer', pahandle, audiodata1);
-    if debug_mode
-        Screen('TextSize', window, round(screenXpixels/40));
-        Screen('TextFont', window, 'Arial');
-        DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
-    else
-        Screen('FillRect', window, back_color);
-    end
-    Screen('Flip', window);
-    PsychPortAudio('Start', pahandle, 1, 0, 1);
-    WaitSecs(duration1);
-    PsychPortAudio('Stop', pahandle);
-
-    % Fixation cross between stimuli
-    Screen('FillRect', window, back_color);
-    Screen('Flip', window);
-    Screen('TextSize', window, round(screenXpixels/40));
-    Screen('TextFont', window, 'Arial');
-    DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
-    Screen('Flip', window);
-    WaitSecs(1);
-
-    % Second audio stimulus
-    audiodata2 = MakeBeep(audio_frequency, duration2, 44100);
-    PsychPortAudio('FillBuffer', pahandle, audiodata2);
-    if debug_mode
-        Screen('TextSize', window, round(screenXpixels/40));
-        Screen('TextFont', window, 'Arial');
-        DrawFormattedText(window, '+', 'center', 'center', 0, round(screenXpixels*(1/20)), black);
-    else
-        Screen('FillRect', window, back_color);
-    end
-    Screen('Flip', window);
-    PsychPortAudio('Start', pahandle, 1, 0, 1);
-    WaitSecs(duration2);
-    PsychPortAudio('Stop', pahandle);
-    Screen('FillRect', window, back_color);
-    Screen('Flip', window);
+% Second stimulus
+present_stimulus(window, texture, duration2, stimulus_modality, back_color, black, screenXpixels, pahandle, audio_frequency, debug_mode);
+if ~isempty(texture)
+    Screen('Close', texture);
 end
 
 % Response signal

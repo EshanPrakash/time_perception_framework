@@ -159,6 +159,7 @@ function results = run_doublecomp_experiment(directory_link, save_after, partici
         results.Stimulus(trial_counter) = stimulus;
         results.Standard_Time_Condition(trial_counter) = standard_duration;
         results.Comp_Time_Condition(trial_counter) = comp_duration;
+        results.Modality(trial_counter) = stimulus_modality;
         results.Response(trial_counter) = result;
         results.Trial_Datetime(trial_counter) = timestamp_utc();
         if mod(trial_counter, save_after) == 0

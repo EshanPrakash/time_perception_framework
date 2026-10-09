@@ -16,7 +16,7 @@ num_training_trials = 5;            % Number of training trials to include befor
 
 % Parameters Specific to the Time Reproduction Task
 replication_type = "hold";          % Choices: "start_stop", "hold", "stop"
-stimulus_modality = "alternating";       % Choices: "visual", "audio", "alternating"
+stimulus_modality = "alternating";       % Choices: "visual", "audio", "both", "alternating"
 audio_frequency = 440;              % Hz — only used if stimulus_modality == "audio"
 debug_mode = true;                 % If true and audio, shows fixation cross during tone
 stimulus_type = "default.jpg";      % Choices: "default", ["image path #1", "image path #2, ...].
@@ -34,7 +34,7 @@ black = BlackIndex(screenNumber);
 [window, ~] = PsychImaging('OpenWindow', screenNumber, grey);
 [screenXpixels, screenYpixels] = Screen('WindowSize', window);
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-if stimulus_modality == "audio" || stimulus_modality == "alternating"
+if stimulus_modality ~= "visual"
     InitializePsychSound(1);
     pahandle = PsychPortAudio('Open', [], 1, 1, 44100, 1);
 else
@@ -46,7 +46,7 @@ data_table = run_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, replication_type, stimulus_type, durations, ...
     num_trials, stimulus_modality, pahandle, audio_frequency, debug_mode, white, grey, black, window, screenXpixels, screenYpixels);
 
-if stimulus_modality == "audio" || stimulus_modality == "alternating"
+if stimulus_modality ~= "visual"
     PsychPortAudio('Close', pahandle);
 end
 sca; % Closing screen

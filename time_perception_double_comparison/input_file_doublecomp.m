@@ -18,8 +18,8 @@ comp_type = "shorter/longer";                             % How should images be
                                                             % Choices: "shorter/longer", "equal/not equal", "shorter/equal/longer".
 comp_order = "random";                                    % Comparison Stimulus Presentation Times.
                                                             % Choices: "fixed", "random"
-stimulus_modality = "visual";                             % Choices: "visual", "audio"
-audio_frequency = 440;                                    % Hz — only used if stimulus_modality == "audio"
+stimulus_modality = "visual";                             % Choices: "visual", "audio", "both"
+audio_frequency = 440;                                    % Hz — only used if stimulus_modality ~= "visual"
 debug_mode = false;                                       % If true and audio, shows fixation cross during tone
 stimulus = "default.jpg";                                 % Preferred stimulus jpg file name or "default.jpg". The image to be used to represent standard and comparison durations.
 twoimage_standard_durations = [1, 2];                     % Durations for standard images. Each duration will be used for each standard image.
@@ -39,7 +39,7 @@ black = BlackIndex(screenNumber);
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
  
 % Audio setup
-if stimulus_modality == "audio"
+if stimulus_modality ~= "visual"
     InitializePsychSound(1);
     pahandle = PsychPortAudio('Open', [], 1, 1, 44100, 1);
 else
@@ -52,7 +52,7 @@ data_table = run_doublecomp_experiment(directory_link, save_after, participant_n
     twoimage_comp_durations, num_comp_trials, comp_type, comp_order, stimulus_modality, pahandle, audio_frequency, debug_mode, ...
     white, grey, black, window, screenXpixels, screenYpixels);
 
-if stimulus_modality == "audio"
+if stimulus_modality ~= "visual"
     PsychPortAudio('Close', pahandle);
 end
 

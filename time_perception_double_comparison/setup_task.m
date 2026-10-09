@@ -15,9 +15,9 @@ function [est_time, total_num_trials, results_table, exp_condition_list, train_c
     break_times = break_times(:, 2:num_breaks+1)-1;
     
     % Creating the results table. 
-    table_var_types = ["string", "double", "double", "string", "string"];
-    table_var_names =  ["Stimulus", "Standard_Time_Condition", "Comp_Time_Condition", "Response", "Trial_Datetime"];
-    results_table = table('Size', [total_num_trials 5], 'VariableTypes', table_var_types, 'VariableNames', table_var_names);
+    table_var_types = ["string", "double", "double", "string", "string", "string"];
+    table_var_names =  ["Stimulus", "Standard_Time_Condition", "Comp_Time_Condition", "Modality", "Response", "Trial_Datetime"];
+    results_table = table('Size', [total_num_trials 6], 'VariableTypes', table_var_types, 'VariableNames', table_var_names);
 
     % Determining estimated experiment time. Includes training and
     % experimental durations, response time, segway time of 1 second per

@@ -132,6 +132,7 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
         end
         results.Stimulus(trial_counter) = stimulus;
         results.Time_Condition(trial_counter) = comp_durations(condition_num);
+        results.Modality(trial_counter) = stimulus_modality;
         results.Response(trial_counter) = result;
         results.Trial_Datetime(trial_counter) = timestamp_utc();
         if mod(trial_counter, save_after) == 0

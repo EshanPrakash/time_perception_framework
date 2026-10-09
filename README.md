@@ -58,6 +58,15 @@ Double comparison experiments can be customized in the following ways under this
 - **Number of Trials:** The number of trials for each duration can also be changed. The same number of trials will be run for each duration. 
 
 
+## Stimulus Modality
+Set `stimulus_modality` in the input file:
+- `"visual"`: the image is shown for the interval.
+- `"audio"`: a tone (`audio_frequency` Hz) plays for the interval. With `debug_mode = true`, a fixation cross is shown during the tone.
+- `"both"`: the image and tone start together and last for the same duration (congruent presentation). The tone and screen flip are scheduled for the same time, so their onsets can differ by up to one screen refresh.
+- `"alternating"` (replication only): trials alternate between visual and audio.
+
+The modality of each trial is saved in the `Modality` column.
+
 # How to customize experiments 
 All experiments are customized using the parameters in that experiment's input file. Descriptions of each parameter are included in the input file. The parameters that can be changed are structured roughly as they are outlined above.  Examples of how to change the parameters to run each task follow in the "Example" sections. Only parameters relevant to the experiment at hand need to be changed and will be displayed in each example.  
 
