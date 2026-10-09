@@ -10,9 +10,9 @@ function present_std_image(directory_link, stimulus, standard_duration, window, 
 
     if stimulus_modality == "visual"
         if stimulus == "default"
-            stimulus_link = directory_link + stimulus + ".jpg";
+            stimulus_link = fullfile(directory_link, stimulus + ".jpg");
         else
-            stimulus_link = directory_link + stimulus;
+            stimulus_link = fullfile(directory_link, stimulus);
         end
         texture = Screen('MakeTexture', window, resize_image(imread(stimulus_link), screenYpixels));
         Screen('DrawTexture', window, texture, [], [], 0);

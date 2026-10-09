@@ -3,6 +3,7 @@ function [response] = run_trial(stimulus, standard_duration, comp_duration, comp
 
 if comp_order == "random"
     order = randperm(2);
+    comp_first = (order(1) == 2);
     if order(1) == 1
         duration1 = standard_duration;
         duration2 = comp_duration;
@@ -11,6 +12,7 @@ if comp_order == "random"
         duration2 = standard_duration;
     end
 else
+    comp_first = false;
     duration1 = standard_duration;
     duration2 = comp_duration;
 end
@@ -25,7 +27,7 @@ Screen('Flip', window);
 WaitSecs(1);
 
 if stimulus_modality == "visual"
-    stimulus_link = directory_link + stimulus;
+    stimulus_link = fullfile(directory_link, stimulus);
     texture = Screen('MakeTexture', window, resize_image(imread(stimulus_link), screenYpixels));
 
     % First stimulus
@@ -96,11 +98,14 @@ Screen('FillRect', window, back_color);
 Screen('Flip', window);
 
 response = collect_comparison_response(comp_type);
-% Switching response order if presentation was random
-if response == "shorter" && duration1 == comp_duration
-    response = "longer";
-elseif response == "longer" && duration1 == comp_duration
-    response = "shorter";
-
+% Switching response order if the comparison was presented first, so that
+% responses are always coded relative to the comparison duration.
+if comp_first
+    if response == "shorter"
+        response = "longer";
+    elseif response == "longer"
+        response = "shorter";
+    end
+end
 WaitSecs(1);
 end

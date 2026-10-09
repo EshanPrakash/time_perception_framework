@@ -2,7 +2,7 @@
 function response = run_trial(directory_link, stimulus, duration, comp_type, window, back_color, black, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode)
 
 if stimulus_modality == "visual"
-    stimulus_link = directory_link + stimulus;
+    stimulus_link = fullfile(directory_link, stimulus);
     texture = Screen('MakeTexture', window, resize_image(imread(stimulus_link), screenYpixels));
     Screen('DrawTexture', window, texture, [], [], 0);
     Screen('Flip', window);

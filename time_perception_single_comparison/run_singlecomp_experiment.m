@@ -5,6 +5,7 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
     white, grey, black, window, screenXpixels, screenYpixels)
     
     [est_time, num_trials, results, exp_condition_list, train_condition_list, break_times] = setup_task(comp_durations, num_comp_trials, num_training_trials, num_breaks);
+    [session_id, session_start] = new_session();
 
     if background_color == "grey"
         back_color = grey;
@@ -122,22 +123,20 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
     % Run experiment. Breaks Included When Necessary
     break_statement = 'You may now take a break. \n \n Press the spacebar to continue the session.';
     for trial_counter=1:length(exp_condition_list)
-        % Temporarily saving data table
-        if mod(trial_counter, save_after) == 0                                                                            
-            if exist(char(directory_link + "/results" + string("/dataP" + string(participant_number))), 'file')~=0
-                delete(char(directory_link + "/results" + string("/dataP" + string(participant_number))));
-            end
-            writetable(results, char(directory_link + "/results" + string("/dataP" + string(participant_number))))
-        end
         % Running trial
         condition_num = exp_condition_list(trial_counter);
         result = run_trial(directory_link, stimulus, comp_durations(condition_num), comp_type, window, back_color, black, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode);
         if result == "escape"
+            save_results(results, trial_counter-1, directory_link, participant_number, session_id, session_start);
             return
         end
         results.Stimulus(trial_counter) = stimulus;
         results.Time_Condition(trial_counter) = comp_durations(condition_num);
         results.Response(trial_counter) = result;
+        results.Trial_Datetime(trial_counter) = timestamp_utc();
+        if mod(trial_counter, save_after) == 0
+            save_results(results, trial_counter, directory_link, participant_number, session_id, session_start);
+        end
         % Checking to present break
         if any(break_times == trial_counter)
             success = display_screen_text(break_statement, ...
@@ -146,16 +145,14 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
             black, ...
             screenXpixels);
             if success == false
+                save_results(results, trial_counter, directory_link, participant_number, session_id, session_start);
                 return
             end
         end
     end
     
     % Saving data table
-    if exist(char(directory_link + "/results" + string("/dataP" + string(participant_number))), 'file')~=0
-                delete(char(directory_link + "/results" + string("/dataP" + string(participant_number))));
-    end
-    writetable(results, char(directory_link + "/results" + string("/dataP" + string(participant_number))))
+    save_results(results, num_trials, directory_link, participant_number, session_id, session_start);
         
     % Experiment outro
     end_statement = 'You have completed the experiment! \n \n Call the proctor into the room.';

@@ -4,6 +4,7 @@ function results = run_experiment(directory_link, save_after, participant_number
     num_trials, stimulus_modality, pahandle, audio_frequency, debug_mode, white, grey, black, window, screenXpixels, screenYpixels)
     
     [est_time, num_trials, results, exp_condition_list, train_condition_list, break_times] = setup_task(stimulus_type, durations, num_trials, num_training_trials, num_breaks);
+    [session_id, session_start] = new_session();
 
     if background_color == "grey"
         back_color = grey;
@@ -72,12 +73,6 @@ function results = run_experiment(directory_link, save_after, participant_number
    % Run experiment. Breaks Included When Necessary
     break_statement = 'You may now take a break. \n \n Press the spacebar to continue the session.';
     for trial_counter=1:length(exp_condition_list)
-        if mod(trial_counter, save_after) == 0                                                                            
-            if exist(char(directory_link + "/results" + string("/dataP" + string(participant_number))), 'file')~=0
-                delete(char(directory_link + "/results" + string("/dataP" + string(participant_number))));
-            end
-            writetable(results, char(directory_link + "/results" + string("/dataP" + string(participant_number))))
-        end
         condition_num = exp_condition_list(trial_counter);
         [stimulus, duration] = find_condition(stimulus_type, durations, condition_num);
         if stimulus_modality == "alternating"
@@ -91,12 +86,17 @@ function results = run_experiment(directory_link, save_after, participant_number
         end
         [stimulus, duration, response] = run_trial(stimulus, duration, replication_type, back_color, black, directory_link, window, screenYpixels, screenXpixels, trial_modality, pahandle, audio_frequency, debug_mode);
         if string(response) == "escape"
+            save_results(results, trial_counter-1, directory_link, participant_number, session_id, session_start);
             return
         end
         results.Image1(trial_counter) = stimulus;
         results.Time_Condition(trial_counter) = duration;
         results.Modality(trial_counter) = trial_modality;
         results.Response(trial_counter) = response;
+        results.Trial_Datetime(trial_counter) = timestamp_utc();
+        if mod(trial_counter, save_after) == 0
+            save_results(results, trial_counter, directory_link, participant_number, session_id, session_start);
+        end
         if any(break_times == trial_counter)
             success = display_screen_text(break_statement, ...
             window, ...
@@ -104,16 +104,14 @@ function results = run_experiment(directory_link, save_after, participant_number
             black, ...
             screenXpixels);
             if success == false
+                save_results(results, trial_counter, directory_link, participant_number, session_id, session_start);
                 return
             end
         end
     end
     
     % Saving data table
-    if exist(char(directory_link + "/results" + string("/dataP" + string(participant_number))), 'file')~=0
-                delete(char(directory_link + "/results" + string("/dataP" + string(participant_number))));
-    end
-    writetable(results, char(directory_link + "/results" + string("/dataP" + string(participant_number))))
+    save_results(results, num_trials, directory_link, participant_number, session_id, session_start);
         
 
     % Experiment outro

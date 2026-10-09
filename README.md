@@ -136,6 +136,18 @@ num_comp_trials = 10;            % How many trials to run for each standard/comp
 # How to run experiments 
 Once you've entered in the parameters for your experiment of choice (and make sure you've set the participant_number, which will be used to save participant data), you're now ready to run the experiment! Simply write the name of your experiment's input file (i.e. input_file_replication, etc.) in the command window, press enter, and the experiment will begin! All instructions for the experiments will be presented to the participants before the task begins. 
 
+# Data output
+Each run writes a new file, `results/dataP<participant>_<session UUID>.txt`, so earlier data is never overwritten. The `results` folder is created if it is missing, and `directory_link` may be left empty to use the current folder. Data is saved every `save_after` trials, when a participant exits with ESCAPE, and at the end; only completed trials are written.
+
+Every file starts with these columns, followed by the experiment's own columns:
+- **Session_ID**: random UUID identifying the run.
+- **Participant**: the `participant_number` set in the input file.
+- **Session_Start**: UTC start time of the session (ISO 8601).
+- **Trial**: trial number within the experiment segment.
+- **Trial_Datetime** (last column): UTC time at which the trial's response was recorded.
+
+Note: the sample analysis scripts treat each file as one participant, so combine files if a participant has several sessions.
+
 # Known Issues
 
 **KBQueueCheck keyboard device ID (may be OS/system-specific):** On some systems, `KBQueueCheck` does not reliably detect the correct keyboard device and must be set manually each run. If you run into this, try replacing the `KBQueueCheck`-based device ID with `-3`, which previously functioned as a reliable universal fallback. This issue may not affect all operating systems or users.
