@@ -15,6 +15,6 @@ function filepath = save_results(results, num_completed, directory_link, partici
         repmat(string(session_start), num_completed, 1), ...
         (1:num_completed)', ...
         'VariableNames', ["Session_ID", "Participant", "Session_Start", "Trial"]);
-    filepath = fullfile(results_dir, "dataP" + participant_number + "_" + session_id + ".txt");
+    filepath = fullfile(results_dir, "dataP" + participant_number + "_" + session_id + ".csv");
     writetable([meta results(1:num_completed, :)], filepath, 'Delimiter', ',');
 end
