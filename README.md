@@ -4,6 +4,8 @@ Included is a body of MATLAB code designed for running time perception experimen
 # About This Fork
 This fork extends the original framework with audio stimulus support, enabling experiments to present intervals as tones in addition to (or alternating with) visual stimuli. The goal is to make the framework more flexible for multi-modal time perception research.
 
+New to this? See [PILOT_GUIDE.md](PILOT_GUIDE.md) for step-by-step install and run instructions.
+
 # What kinds of experiments can I run using this code?
 This code supports visual and auditory prospective time replication and comparison experiments. The following structure is used for all experiments: Insert diagram. 
 
@@ -29,7 +31,7 @@ Time replication experiments assess how well a user can replicate a given time i
 The following customizations can be made to the base experiment:
 - **Replication Type**: There are several common ways for a participant to replicate the subjective duration of a visual or auditory stimulus. They include pressing a key to start and pressing a key to end the replicated interval, holding on a key for the subjective duration of the interval, and receiving a signal that the replicated interval has begun and pressing a key to stop the interval.
 - **Durations**: The number and length of intervals 
-- **Stimuli**: The default stimulus is a large circle. Any number of user defined images can be used as alternatives to the default stimulus.
+- **Stimuli**: The default stimulus is a large circle. A Gaussian blob is available with `"gaussian"`. Any number of user defined images can be used as alternatives to the default stimulus.
 - **Number of Trials**: The number of trials for each duration/stimulus combination can also be changed. Note that every duration specified will be matched with every stimulus specified, and the same number of trials will be applied to each duration/stimulus combination. 
 
 ## Comparison Experiments 
@@ -40,7 +42,7 @@ In single image experiments, participants are presented with one or more "standa
 
 Single comparison experiments can be customized in the following ways under this framework:
 - **Comparison Type:** The nature of the comparison between trial durations and the standard duration can be customized by specifying whether the trial duration is _shorter or longer_ than the standard duration, _equal or unequal_ to the standard duration, or _shorter, equal, or longer_ than the standard duration. 
-- **Stimulus:** The default stimulus is a large black circle. A user specified image may also be used. This version of the experiment is only designed for a single stimulus.
+- **Stimulus:** The default stimulus is a large black circle; `"gaussian"` gives a Gaussian blob. A user specified image may also be used. This version of the experiment is only designed for a single stimulus.
 - **Standard Duration:** The duration of the standard image can be specified. Only one standard duration is supported under this version of the framework.
 - **Comparison Durations:** Any number and length of stimulus durations to be compared with the standard duration can be specified.
 - **Number of Trials:** The number of trials for each duration can also be changed. The same number of trials will be run for each duration. 
@@ -75,7 +77,7 @@ Suppose for all experiments that we've downloaded the experiment code folder to 
 ## Replication Experiment Example
 Suppose we want to run a replication experiment with the default stimulus to assess how well participants can remember and distinguish between close together time intervals. Navigate to the "input_file_replication.m" file in the time_perception_replication folder. 
 
-For this version of the experiment, we want participants to hold down on the space bar when they replicate intervals to respond. Since we want to use the default stimulus, we'll set the stimulus type accordingly. We will test the default stimulus on two durations - 1s, 2s - with ten trials for each duration so we can average them later on. We'll set these parameters in the Time Reproduction Task section. 
+For this version of the experiment, we want participants to hold down on the space bar when they replicate intervals to respond. Since we want to use the default stimulus, we'll set the stimulus type accordingly. We will test the default stimulus on three durations - 1s, 2s, 3s - with ten trials for each duration so we can average them later on. We'll set these parameters in the Time Reproduction Task section. 
 
 ```
 % General Parameters - to be changed for each operating system and experiment.
@@ -90,7 +92,7 @@ num_training_trials = 5;            % Number of training trials to include befor
 % Parameters Specific to the Time Reproduction Task
 replication_type = "hold";    % Choices: "start_stop", "hold", "stop"
 stimulus_type = "default.jpg";     % Choices: "default", ["image path #1", "image path #2, ...].
-durations = [1,2];                     % Durations to test per stimulus. Assumes same  durations for each stimulus.
+durations = [1,2,3];                   % Durations to test per stimulus. Assumes same  durations for each stimulus.
 num_trials = 10;                     % How many trials per duration-stimulus combination.
 
 ```
@@ -120,7 +122,7 @@ num_comp_trials = 10;               % How many trials per duration being compare
 ```
 
 ## Double Image Comparison Experiment Example
-Suppose for the double image comparison experiment, we want to run the example used for the single image comparison task, keeping the order of the standard and comparison images fixed. Now, navigate to the "input_file_doublecomp.m" file in the "time_perception_double_comp" folder. And change the parameters to the following:
+Suppose for the double image comparison experiment, we want to run a version of the single image comparison task with three standard durations and six comparison durations per standard, keeping the order of the standard and comparison images fixed. Now, navigate to the "input_file_doublecomp.m" file in the "time_perception_double_comp" folder. And change the parameters to the following:
 
 ```
 % General Parameters - to be changed for each operating system and experiment.
@@ -135,9 +137,11 @@ num_training_trials = 5;            % Number of training trials to include befor
 comp_type = "shorter/longer";                     % How should images be compared? 
                                         % Choices: "shorter/longer", "equal/not equal", "shorter/equal/longer". 
 comp_order = "fixed";          % Choices: "fixed", "random"
-stimulus = "default";              % Preferred stimulus jpg file name or "default". The image to be used to represent standard and comparison durations. 
-twoimage_standard_durations = [1, 2];   % Durations for standard images. Each duration will be used for each standard image.
-twoimage_comp_durations = [0.5, 1, 1.5; 1.5, 2, 2.5];     % What comparison durations should be used relative to each standard duration? List in order of standard durations indicated above.
+stimulus = "default";              % Preferred stimulus jpg file name, "default", or "gaussian". The image to be used to represent standard and comparison durations. 
+twoimage_standard_durations = [1, 2, 3];   % Durations for standard images.
+twoimage_comp_durations = [0.5, 0.75, 0.9, 1.1, 1.25, 1.5; ...   % One row per standard duration above (same order),
+                           1.0, 1.5, 1.8, 2.2, 2.5, 3.0; ...     % one column per comparison duration.
+                           1.5, 2.25, 2.7, 3.3, 3.75, 4.5];
 num_comp_trials = 10;            % How many trials to run for each standard/comparison duration
 ```
 
@@ -146,7 +150,7 @@ num_comp_trials = 10;            % How many trials to run for each standard/comp
 Once you've entered in the parameters for your experiment of choice (and make sure you've set the participant_number, which will be used to save participant data), you're now ready to run the experiment! Simply write the name of your experiment's input file (i.e. input_file_replication, etc.) in the command window, press enter, and the experiment will begin! All instructions for the experiments will be presented to the participants before the task begins. 
 
 # Data output
-Each run writes a new file, `results/dataP<participant>_<session UUID>.txt`, so earlier data is never overwritten. The `results` folder is created if it is missing, and `directory_link` may be left empty to use the current folder. Data is saved every `save_after` trials, when a participant exits with ESCAPE, and at the end; only completed trials are written.
+Each run writes a new file, `results/dataP<participant>_<session UUID>.csv`, so earlier data is never overwritten. The `results` folder is created if it is missing, and `directory_link` may be left empty to use the current folder. Data is saved every `save_after` trials, when a participant exits with ESCAPE, and at the end; only completed trials are written.
 
 Every file starts with these columns, followed by the experiment's own columns:
 - **Session_ID**: random UUID identifying the run.
