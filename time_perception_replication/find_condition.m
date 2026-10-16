@@ -1,13 +1,8 @@
-% FUNCTION: Function to find the stimulus, standard duration, and
-% comparison duration to present an image for, given a trial indicator
-% number. 
+% FUNCTION: Function to find the stimulus and duration to present for a
+% given trial indicator number. Condition numbers run over every
+% (stimulus, duration) pair.
 function [image, duration] = find_condition(stimulus_type, durations, number)
-% Uses the assigned condition number to find the image and duration needed
-% for the trial. 
-        num_images = length(stimulus_type);
-        num_durations = length(durations);
-        image_index = mod(number, num_images) + 1;
+        [image_index, duration_index] = ind2sub([length(stimulus_type), length(durations)], number);
         image = stimulus_type(image_index);
-        duration_index = mod(number-image_index, num_durations) + 1;
         duration = durations(duration_index);
 end

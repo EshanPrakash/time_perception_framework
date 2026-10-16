@@ -19,8 +19,8 @@ replication_type = "hold";          % Choices: "start_stop", "hold", "stop"
 stimulus_modality = "alternating";       % Choices: "visual", "audio", "both", "alternating"
 audio_frequency = 440;              % Hz — only used if stimulus_modality == "audio"
 debug_mode = true;                 % If true and audio, shows fixation cross during tone
-stimulus_type = "default.jpg";      % Choices: "default", ["image path #1", "image path #2, ...].
-durations = [1,2];                  % Durations to test per stimulus. Assumes same  durations for each stimulus.
+stimulus_type = "default.jpg";      % Choices: "default.jpg", "gaussian" (Gaussian blob), ["image path #1", "image path #2, ...].
+durations = [1,2,3];                % Durations to test per stimulus. Assumes same  durations for each stimulus.
 num_trials = 10;                    % How many trials per duration-stimulus combination.
 
 

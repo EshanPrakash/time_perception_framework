@@ -19,7 +19,7 @@ comp_type = "shorter/longer";       % How should images be compared?
 stimulus_modality = "visual";       % Choices: "visual", "audio", "both"
 audio_frequency = 440;              % Hz — only used if stimulus_modality ~= "visual"
 debug_mode = false;                 % If true and audio, shows fixation cross during tone
-stimulus = "default.jpg";           % Choices: "default", or insert your own jpg image.
+stimulus = "default.jpg";           % Choices: "default", "gaussian" (Gaussian blob), or insert your own jpg image.
 standard_duration = 1;              % Duration of standard image.
 comp_durations = [0.5, 1, 1.5];     % Durations for comparison images.
 num_comp_trials = 10;               % How many trials per duration being compared.

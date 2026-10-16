@@ -10,12 +10,7 @@ function present_std_image(directory_link, stimulus, standard_duration, window, 
 
     texture = [];
     if stimulus_modality ~= "audio"
-        if stimulus == "default"
-            stimulus_link = fullfile(directory_link, stimulus + ".jpg");
-        else
-            stimulus_link = fullfile(directory_link, stimulus);
-        end
-        texture = Screen('MakeTexture', window, resize_image(imread(stimulus_link), screenYpixels));
+        texture = make_stimulus_texture(window, directory_link, stimulus, screenYpixels);
     end
     % The standard is always presented without the debug fixation cross.
     present_stimulus(window, texture, standard_duration, stimulus_modality, background_color, black, screenXpixels, pahandle, audio_frequency, false);

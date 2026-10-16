@@ -4,8 +4,7 @@ function [stimulus, duration, response] = run_trial(stimulus, duration, response
 
 texture = [];
 if stimulus_modality ~= "audio"
-    stimulus_link = fullfile(directory_link, stimulus);
-    texture = Screen('MakeTexture', window, resize_image(imread(stimulus_link), screenYpixels));
+    texture = make_stimulus_texture(window, directory_link, stimulus, screenYpixels);
 end
 present_stimulus(window, texture, duration, stimulus_modality, background_color, black, screenXpixels, pahandle, audio_frequency, debug_mode);
 if ~isempty(texture)

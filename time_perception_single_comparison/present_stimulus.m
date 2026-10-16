@@ -8,6 +8,7 @@ function present_stimulus(window, texture, duration, modality, back_color, black
     end
 
     if modality == "visual"
+        Screen('FillRect', window, back_color);
         Screen('DrawTexture', window, texture, [], [], 0);
         Screen('Flip', window);
         WaitSecs(duration);
@@ -28,6 +29,7 @@ function present_stimulus(window, texture, duration, modality, back_color, black
         % flip lands on the first screen refresh after that time, so the
         % two onsets can differ by up to one refresh interval.
         start_time = GetSecs() + 0.1;
+        Screen('FillRect', window, back_color);
         Screen('DrawTexture', window, texture, [], [], 0);
         PsychPortAudio('Start', pahandle, 1, start_time, 0);
         Screen('Flip', window, start_time);

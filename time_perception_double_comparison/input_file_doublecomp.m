@@ -21,9 +21,11 @@ comp_order = "random";                                    % Comparison Stimulus 
 stimulus_modality = "visual";                             % Choices: "visual", "audio", "both"
 audio_frequency = 440;                                    % Hz — only used if stimulus_modality ~= "visual"
 debug_mode = false;                                       % If true and audio, shows fixation cross during tone
-stimulus = "default.jpg";                                 % Preferred stimulus jpg file name or "default.jpg". The image to be used to represent standard and comparison durations.
-twoimage_standard_durations = [1, 2];                     % Durations for standard images. Each duration will be used for each standard image.
-twoimage_comp_durations = [0.5, 1, 1.5; 1.5, 2, 2.5];     % What comparison durations should be used relative to each standard duration? List in order of standard durations indicated above.
+stimulus = "default.jpg";                                 % Preferred stimulus jpg file name, "default.jpg", or "gaussian" for a Gaussian blob. The image to be used to represent standard and comparison durations.
+twoimage_standard_durations = [1, 2, 3];                  % Durations for standard images.
+twoimage_comp_durations = [0.5, 0.75, 0.9, 1.1, 1.25, 1.5; ...   % Comparison durations for each standard: one row per standard duration above,
+                           1.0, 1.5, 1.8, 2.2, 2.5, 3.0; ...     % in the same order, and one column per comparison duration (6 per standard).
+                           1.5, 2.25, 2.7, 3.3, 3.75, 4.5];
 num_comp_trials = 10;                                     % How many trials to run for each standard/comparison duration
 
 

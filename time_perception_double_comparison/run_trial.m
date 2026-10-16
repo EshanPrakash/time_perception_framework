@@ -28,8 +28,7 @@ WaitSecs(1);
 
 texture = [];
 if stimulus_modality ~= "audio"
-    stimulus_link = fullfile(directory_link, stimulus);
-    texture = Screen('MakeTexture', window, resize_image(imread(stimulus_link), screenYpixels));
+    texture = make_stimulus_texture(window, directory_link, stimulus, screenYpixels);
 end
 
 % First stimulus
