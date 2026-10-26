@@ -16,9 +16,12 @@ num_training_trials = 5;            % Number of training trials to include befor
 % Parameters Specific to the Time Comparison Task
 comp_type = "shorter/longer";       % How should images be compared?
                                         % Choices: "shorter/longer", "equal/not equal", "shorter/equal/longer".
-stimulus_modality = "visual";       % Choices: "visual", "audio", "both"
+stimulus_modality = "visual";       % Choices: "visual", "audio", "both", "conflict"
 audio_frequency = 440;              % Hz — only used if stimulus_modality ~= "visual"
 debug_mode = false;                 % If true and audio, shows fixation cross during tone
+judged_modality = "audio";          % Only used if stimulus_modality = "conflict". Which modality participants judge; the other is the distractor.
+conflict_ratio = 0.2;               % Only used if stimulus_modality = "conflict". Distractor duration = judged duration x (1 +/- conflict_ratio).
+conflict_proportion = 0.5;          % Only used if stimulus_modality = "conflict". Proportion of trials with mismatched durations; the rest are congruent.
 stimulus = "default.jpg";           % Choices: "default", "gaussian" (Gaussian blob), or insert your own jpg image.
 standard_duration = 1;              % Duration of standard image.
 comp_durations = [0.5, 1, 1.5];     % Durations for comparison images.
@@ -47,7 +50,7 @@ end
 % Run experiment
 data_table = run_singlecomp_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, stimulus, standard_duration, ...
-    comp_durations, num_comp_trials, comp_type, stimulus_modality, pahandle, audio_frequency, debug_mode, ...
+    comp_durations, num_comp_trials, comp_type, stimulus_modality, pahandle, audio_frequency, debug_mode, judged_modality, conflict_ratio, conflict_proportion, ...
     white, grey, black, window, screenXpixels, screenYpixels);
 
 if stimulus_modality ~= "visual"

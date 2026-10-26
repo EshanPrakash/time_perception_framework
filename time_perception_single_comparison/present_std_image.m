@@ -8,12 +8,18 @@ function present_std_image(directory_link, stimulus, standard_duration, window, 
             screenXpixels);
     WaitSecs(0.5);
 
+    % The standard is always congruent, even in conflict experiments.
+    if stimulus_modality == "conflict"
+        stimulus_modality = "both";
+    end
+    interval = make_interval(standard_duration, stimulus_modality, "audio", 0, 0);
+
     texture = [];
     if stimulus_modality ~= "audio"
         texture = make_stimulus_texture(window, directory_link, stimulus, screenYpixels);
     end
     % The standard is always presented without the debug fixation cross.
-    present_stimulus(window, texture, standard_duration, stimulus_modality, background_color, black, screenXpixels, pahandle, audio_frequency, false);
+    present_stimulus(window, texture, interval, background_color, black, screenXpixels, pahandle, audio_frequency, false);
     if ~isempty(texture)
         Screen('Close', texture);
     end

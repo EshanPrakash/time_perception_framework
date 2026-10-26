@@ -18,9 +18,12 @@ comp_type = "shorter/longer";                             % How should images be
                                                             % Choices: "shorter/longer", "equal/not equal", "shorter/equal/longer".
 comp_order = "random";                                    % Comparison Stimulus Presentation Times.
                                                             % Choices: "fixed", "random"
-stimulus_modality = "visual";                             % Choices: "visual", "audio", "both"
+stimulus_modality = "visual";                             % Choices: "visual", "audio", "both", "conflict"
 audio_frequency = 440;                                    % Hz — only used if stimulus_modality ~= "visual"
 debug_mode = false;                                       % If true and audio, shows fixation cross during tone
+judged_modality = "audio";                                % Only used if stimulus_modality = "conflict". Which modality participants judge; the other is the distractor.
+conflict_ratio = 0.2;                                     % Only used if stimulus_modality = "conflict". Distractor duration = judged duration x (1 +/- conflict_ratio).
+conflict_proportion = 0.5;                                % Only used if stimulus_modality = "conflict". Proportion of trials with mismatched durations; the rest are congruent.
 stimulus = "default.jpg";                                 % Preferred stimulus jpg file name, "default.jpg", or "gaussian" for a Gaussian blob. The image to be used to represent standard and comparison durations.
 twoimage_standard_durations = [1, 2, 3];                  % Durations for standard images.
 twoimage_comp_durations = [0.5, 0.75, 0.9, 1.1, 1.25, 1.5; ...   % Comparison durations for each standard: one row per standard duration above,
@@ -51,7 +54,7 @@ end
 % Running experiment
 data_table = run_doublecomp_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, stimulus, twoimage_standard_durations, ...
-    twoimage_comp_durations, num_comp_trials, comp_type, comp_order, stimulus_modality, pahandle, audio_frequency, debug_mode, ...
+    twoimage_comp_durations, num_comp_trials, comp_type, comp_order, stimulus_modality, pahandle, audio_frequency, debug_mode, judged_modality, conflict_ratio, conflict_proportion, ...
     white, grey, black, window, screenXpixels, screenYpixels);
 
 if stimulus_modality ~= "visual"

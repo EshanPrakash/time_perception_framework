@@ -1,20 +1,20 @@
 % FUNCTION: Function to run each trial.
-function [response] = run_trial(stimulus, standard_duration, comp_duration, comp_order, comp_type, back_color, black, directory_link, window, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode)
+function [response] = run_trial(stimulus, std_interval, comp_interval, comp_order, comp_type, back_color, black, directory_link, window, screenXpixels, screenYpixels, pahandle, audio_frequency, debug_mode)
 
 if comp_order == "random"
     order = randperm(2);
     comp_first = (order(1) == 2);
     if order(1) == 1
-        duration1 = standard_duration;
-        duration2 = comp_duration;
+        interval1 = std_interval;
+        interval2 = comp_interval;
     else
-        duration1 = comp_duration;
-        duration2 = standard_duration;
+        interval1 = comp_interval;
+        interval2 = std_interval;
     end
 else
     comp_first = false;
-    duration1 = standard_duration;
-    duration2 = comp_duration;
+    interval1 = std_interval;
+    interval2 = comp_interval;
 end
 
 % Fixation cross before first stimulus
@@ -27,12 +27,12 @@ Screen('Flip', window);
 WaitSecs(1);
 
 texture = [];
-if stimulus_modality ~= "audio"
+if std_interval.Modality ~= "audio"
     texture = make_stimulus_texture(window, directory_link, stimulus, screenYpixels);
 end
 
 % First stimulus
-present_stimulus(window, texture, duration1, stimulus_modality, back_color, black, screenXpixels, pahandle, audio_frequency, debug_mode);
+present_stimulus(window, texture, interval1, back_color, black, screenXpixels, pahandle, audio_frequency, debug_mode);
 
 % Fixation cross between stimuli
 Screen('FillRect', window, back_color);
@@ -44,7 +44,7 @@ Screen('Flip', window);
 WaitSecs(1);
 
 % Second stimulus
-present_stimulus(window, texture, duration2, stimulus_modality, back_color, black, screenXpixels, pahandle, audio_frequency, debug_mode);
+present_stimulus(window, texture, interval2, back_color, black, screenXpixels, pahandle, audio_frequency, debug_mode);
 if ~isempty(texture)
     Screen('Close', texture);
 end

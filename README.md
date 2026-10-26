@@ -65,9 +65,10 @@ Set `stimulus_modality` in the input file:
 - `"visual"`: the image is shown for the interval.
 - `"audio"`: a tone (`audio_frequency` Hz) plays for the interval. With `debug_mode = true`, a fixation cross is shown during the tone.
 - `"both"`: the image and tone start together and last for the same duration (congruent presentation). The tone and screen flip are scheduled for the same time, so their onsets can differ by up to one screen refresh.
+- `"conflict"`: the image and tone are presented with different durations, with the shorter one centred in the longer one (an equal gap at the beginning and end). Participants judge one modality (`judged_modality`); the other is the distractor and lasts the judged duration x (1 +/- `conflict_ratio`), with the sign chosen at random. Only a proportion `conflict_proportion` of trials are mismatched; the rest are congruent (image and tone together). In single comparison, the standard is always congruent. In double comparison, each of the two intervals in a trial is made a conflict interval independently.
 - `"alternating"` (replication only): trials alternate between visual and audio.
 
-The modality of each trial is saved in the `Modality` column.
+The modality of each trial is saved in the `Modality` column (in a conflict experiment, `"conflict"` marks mismatched trials and `"both"` marks congruent ones). The actual duration of each modality is saved in `Audio_Duration` and `Visual_Duration` (`Standard_`/`Comp_` prefixed in double comparison); a modality that was not presented is `NaN`. `Time_Condition` is always the duration participants were asked to judge.
 
 # How to customize experiments 
 All experiments are customized using the parameters in that experiment's input file. Descriptions of each parameter are included in the input file. The parameters that can be changed are structured roughly as they are outlined above.  Examples of how to change the parameters to run each task follow in the "Example" sections. Only parameters relevant to the experiment at hand need to be changed and will be displayed in each example.  

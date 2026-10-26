@@ -1,12 +1,13 @@
 % FUNCTION: Function to run each trial. 
-function [stimulus, duration, response] = run_trial(stimulus, duration, response_type, background_color, black, ...
-    directory_link, window, screenYpixels, screenXpixels, stimulus_modality, pahandle, audio_frequency, debug_mode)
+function [stimulus, duration, response] = run_trial(stimulus, interval, response_type, background_color, black, ...
+    directory_link, window, screenYpixels, screenXpixels, pahandle, audio_frequency, debug_mode)
 
+duration = interval.Judged;
 texture = [];
-if stimulus_modality ~= "audio"
+if interval.Modality ~= "audio"
     texture = make_stimulus_texture(window, directory_link, stimulus, screenYpixels);
 end
-present_stimulus(window, texture, duration, stimulus_modality, background_color, black, screenXpixels, pahandle, audio_frequency, debug_mode);
+present_stimulus(window, texture, interval, background_color, black, screenXpixels, pahandle, audio_frequency, debug_mode);
 if ~isempty(texture)
     Screen('Close', texture);
 end

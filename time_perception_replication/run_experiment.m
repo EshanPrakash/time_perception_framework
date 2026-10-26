@@ -1,7 +1,7 @@
 % FUNCTION: Function to run the replication experiment. 
 function results = run_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, replication_type, stimulus_type, durations, ...
-    num_trials, stimulus_modality, pahandle, audio_frequency, debug_mode, white, grey, black, window, screenXpixels, screenYpixels)
+    num_trials, stimulus_modality, pahandle, audio_frequency, debug_mode, judged_modality, conflict_ratio, conflict_proportion, white, grey, black, window, screenXpixels, screenYpixels)
     
     [est_time, num_trials, results, exp_condition_list, train_condition_list, break_times] = setup_task(stimulus_type, durations, num_trials, num_training_trials, num_breaks);
     [session_id, session_start] = new_session();
@@ -37,7 +37,8 @@ function results = run_experiment(directory_link, save_after, participant_number
         else
             trial_modality = stimulus_modality;
         end
-        [~, ~, response] = run_trial(stimulus, duration, replication_type, back_color, black, directory_link, window, screenYpixels, screenXpixels, trial_modality, pahandle, audio_frequency, debug_mode);
+        interval = make_interval(duration, trial_modality, judged_modality, conflict_ratio, conflict_proportion);
+        [~, ~, response] = run_trial(stimulus, interval, replication_type, back_color, black, directory_link, window, screenYpixels, screenXpixels, pahandle, audio_frequency, debug_mode);
         if string(response) == "escape"
             return
         end
@@ -84,14 +85,17 @@ function results = run_experiment(directory_link, save_after, participant_number
         else
             trial_modality = stimulus_modality;
         end
-        [stimulus, duration, response] = run_trial(stimulus, duration, replication_type, back_color, black, directory_link, window, screenYpixels, screenXpixels, trial_modality, pahandle, audio_frequency, debug_mode);
+        interval = make_interval(duration, trial_modality, judged_modality, conflict_ratio, conflict_proportion);
+        [stimulus, duration, response] = run_trial(stimulus, interval, replication_type, back_color, black, directory_link, window, screenYpixels, screenXpixels, pahandle, audio_frequency, debug_mode);
         if string(response) == "escape"
             save_results(results, trial_counter-1, directory_link, participant_number, session_id, session_start);
             return
         end
         results.Image1(trial_counter) = stimulus;
         results.Time_Condition(trial_counter) = duration;
-        results.Modality(trial_counter) = trial_modality;
+        results.Modality(trial_counter) = interval.Modality;
+        results.Audio_Duration(trial_counter) = interval.Audio;
+        results.Visual_Duration(trial_counter) = interval.Visual;
         results.Response(trial_counter) = response;
         results.Trial_Datetime(trial_counter) = timestamp_utc();
         if mod(trial_counter, save_after) == 0

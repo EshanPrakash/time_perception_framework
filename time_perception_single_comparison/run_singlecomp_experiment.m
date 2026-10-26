@@ -1,7 +1,7 @@
 % FUNCTION: Function to run the single comparison experiment. 
 function results = run_singlecomp_experiment(directory_link, save_after, participant_number, ...
     background_color, num_breaks, num_training_trials, stimulus, standard_duration, ...
-    comp_durations, num_comp_trials, comp_type, stimulus_modality, pahandle, audio_frequency, debug_mode, ...
+    comp_durations, num_comp_trials, comp_type, stimulus_modality, pahandle, audio_frequency, debug_mode, judged_modality, conflict_ratio, conflict_proportion, ...
     white, grey, black, window, screenXpixels, screenYpixels)
     
     [est_time, num_trials, results, exp_condition_list, train_condition_list, break_times] = setup_task(comp_durations, num_comp_trials, num_training_trials, num_breaks);
@@ -84,7 +84,8 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
     % Run training trials
     for trial_counter=1:length(train_condition_list)
         condition_num = train_condition_list(trial_counter);
-        result = run_trial(directory_link, stimulus, comp_durations(condition_num), comp_type, window, back_color, black, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode);
+        interval = make_interval(comp_durations(condition_num), stimulus_modality, judged_modality, conflict_ratio, conflict_proportion);
+        result = run_trial(directory_link, stimulus, interval, comp_type, window, back_color, black, screenXpixels, screenYpixels, pahandle, audio_frequency, debug_mode);
         if result == "escape"
             return
         end
@@ -125,14 +126,17 @@ function results = run_singlecomp_experiment(directory_link, save_after, partici
     for trial_counter=1:length(exp_condition_list)
         % Running trial
         condition_num = exp_condition_list(trial_counter);
-        result = run_trial(directory_link, stimulus, comp_durations(condition_num), comp_type, window, back_color, black, screenXpixels, screenYpixels, stimulus_modality, pahandle, audio_frequency, debug_mode);
+        interval = make_interval(comp_durations(condition_num), stimulus_modality, judged_modality, conflict_ratio, conflict_proportion);
+        result = run_trial(directory_link, stimulus, interval, comp_type, window, back_color, black, screenXpixels, screenYpixels, pahandle, audio_frequency, debug_mode);
         if result == "escape"
             save_results(results, trial_counter-1, directory_link, participant_number, session_id, session_start);
             return
         end
         results.Stimulus(trial_counter) = stimulus;
         results.Time_Condition(trial_counter) = comp_durations(condition_num);
-        results.Modality(trial_counter) = stimulus_modality;
+        results.Modality(trial_counter) = interval.Modality;
+        results.Audio_Duration(trial_counter) = interval.Audio;
+        results.Visual_Duration(trial_counter) = interval.Visual;
         results.Response(trial_counter) = result;
         results.Trial_Datetime(trial_counter) = timestamp_utc();
         if mod(trial_counter, save_after) == 0
